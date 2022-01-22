@@ -31,7 +31,7 @@ services:
       <<: *template-deploy  
 
   zabbix-server:
-    image: zabbix/zabbix-server-mysql:ubuntu-5.2-latest
+    image: zabbix/zabbix-server-mysql:ubuntu-5.4-latest
     networks:
      - network-zabbix
     ports:
@@ -45,7 +45,7 @@ services:
       - mysql
 
   zabbix-frontend:
-    image: zabbix/zabbix-web-apache-mysql:ubuntu-5.2-latest
+    image: zabbix/zabbix-web-apache-mysql:ubuntu-5.4-latest
     networks:
     - network-zabbix
     ports:
