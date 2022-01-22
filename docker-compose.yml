@@ -27,7 +27,7 @@ services:
 
   zabbix-server:
     container_name: zabbix-server
-    image: zabbix/zabbix-server-mysql:ubuntu-5.2-latest
+    image: zabbix/zabbix-server-mysql:ubuntu-5.4-latest
     networks:
       - network-zabbix
     links:
@@ -45,7 +45,7 @@ services:
 
   zabbix-frontend:
     container_name: zabbix-frontend
-    image: zabbix/zabbix-web-apache-mysql:ubuntu-5.2-latest
+    image: zabbix/zabbix-web-apache-mysql:ubuntu-5.4-latest
     networks:
       - network-zabbix
     links:
