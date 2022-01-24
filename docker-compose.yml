@@ -19,11 +19,8 @@ services:
       - '3306:3306'
     volumes:
       - './zabbix/mysql:/var/lib/data'
-    environment:
-      - MYSQL_ROOT_PASSWORD=yJHdN#*cKf37
-      - MYSQL_DATABASE=zabbix
-      - MYSQL_USER=zabbix
-      - MYSQL_PASSWORD=yJHdN#*cKf37
+    env_file: 
+      - ./envs/mysql/common.env  
 
   zabbix-server:
     container_name: zabbix-server
