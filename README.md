@@ -17,3 +17,8 @@ Adequado para dois tipos de instalações referente ao software Zabbix
  *Observação: O arquivo de configuração tem um template de deploy incluso, portanto assim que o serviço é parado ele já inicia automaticamente sem precisar de interação com os containers.* 
 
 
+~~~~ Ambiente de produção
+
+Em ambientes de produção, não manter as mesmas senhas que o arquivo do repositório.
+
+~~~~
