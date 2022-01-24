@@ -23,10 +23,10 @@ services:
     volumes:
       - './zabbix/mysql:/var/lib/data'
     environment:
-      - MYSQL_ROOT_PASSWORD=4?Jj(;9*!9~V
+      - MYSQL_ROOT_PASSWORD={DEFINA A SENHA DE ADMINISTRADOR DO MYSQL}
       - MYSQL_DATABASE=zabbix
-      - MYSQL_USER=zabbix
-      - MYSQL_PASSWORD=4?Jj(;9*!9~V
+      - MYSQL_USER={DEFINA O USUÁRIO DO MYSQL}
+      - MYSQL_PASSWORD={DEFINA A SENHA DE ADMINISTRADOR DO MYSQL}
     deploy: 
       <<: *template-deploy  
 
