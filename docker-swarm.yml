@@ -9,8 +9,8 @@ x-deploy: &template-deploy
     delay: 10s
 
 services:
-  mysql:
-    image: mysql:5.7
+  mysql-server:
+    image: mysql:8.0
     command:
       - mysqld
       - --character-set-server=utf8
@@ -22,11 +22,12 @@ services:
       - '3306:3306'
     volumes:
       - './zabbix/mysql:/var/lib/data'
-    environment:
-      - MYSQL_ROOT_PASSWORD=yJHdN#*cKf37
-      - MYSQL_DATABASE=zabbix
-      - MYSQL_USER=zabbix
-      - MYSQL_PASSWORD=yJHdN#*cKf37
+    env_file:
+      - ./env_vars/.env_db_mysql
+    secrets:
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_ROOT_PASSWORD
     deploy: 
       <<: *template-deploy  
 
@@ -37,10 +38,21 @@ services:
     ports:
       - '10051:10051'
     volumes:
-      - './zabbix/alertscripts:/usr/lib/zabbix/alertscripts'
-      - './zabbix/externalscripts:/usr/lib/zabbix/externalscripts'    
-    env_file: 
-      - ./envs/zabbix-server/common.env  
+      - '/etc/localtime:/etc/localtime:ro'
+      - './zbx_env/usr/lib/zabbix/alertscripts:/usr/lib/zabbix/alertscripts:ro'
+      - './zbx_env/usr/lib/zabbix/externalscripts:/usr/lib/zabbix/externalscripts:ro'
+      - './zbx_env/var/lib/zabbix/export:/var/lib/zabbix/export:rw'
+      - './zbx_env/var/lib/zabbix/modules:/var/lib/zabbix/modules:ro'
+      - './zbx_env/var/lib/zabbix/enc:/var/lib/zabbix/enc:ro'
+      - './zbx_env/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro'
+      - './zbx_env/var/lib/zabbix/mibs:/var/lib/zabbix/mibs:ro'
+    env_file:
+       - ./env_vars/.env_db_mysql
+       - ./env_vars/.env_srv
+    secrets:
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_ROOT_PASSWORD
     depends_on:
       - mysql
 
@@ -51,8 +63,16 @@ services:
     ports:
       - '80:8080'
       - '443:8443'
-    env_file: 
-      - ./envs/zabbix-frontend/common.env  
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./zbx_env/etc/ssl/apache2:/etc/ssl/apache2:ro
+      - ./zbx_env/usr/share/zabbix/modules/:/usr/share/zabbix/modules/:ro  
+    env_file:
+      - ./env_vars/.env_db_mysql
+      - ./env_vars/.env_web
+    secrets:
+      - MYSQL_USER
+      - MYSQL_PASSWORD
     deploy: 
        <<: *template-deploy  	
     depends_on:
@@ -74,3 +94,11 @@ services:
         
 networks: 
   network-zabbix:
+
+secrets:
+  MYSQL_USER:
+    file: ./env_vars/.MYSQL_USER
+  MYSQL_PASSWORD:
+    file: ./env_vars/.MYSQL_PASSWORD
+  MYSQL_ROOT_PASSWORD:
+    file: ./env_vars/.MYSQL_ROOT_PASSWORD
